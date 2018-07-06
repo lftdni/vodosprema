@@ -1,0 +1,77 @@
+	 try {
+			 Class.forName("com.mysql.jdbc.Driver");
+			 System.out.println("Worked");
+			 
+		 } catch (ClassNotFoundException e) {
+			 
+			 e.printStackTrace();
+		 }
+		
+			public void setRazina(String string) {
+		this.razina = razina;
+		
+	}
+	
+	
+		public class ReadDB {				
+			
+		}
+		public static void UcitajPod(String[] args) {
+			
+			String url    = "jdbc:mysql://localhost:3306";	
+			try	{
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+				Connection con = DriverManager.getConnection(url);
+				
+				Statement stt = con.createStatement();		
+				
+				// Create and select 
+				
+				stt.execute("CREATE DATABASE IF NOT EXISTS test");
+				stt.execute("USE test");
+				
+				//Create table
+				
+				stt.execute("DROP TABLE IF EXISTS razinavode3");
+				stt.execute("CREATE TABLE razinavode3 (" 
+				+ "id BIGINT NOT NULL AUTO_INCREMENT,"		
+				+ "broj INT(4)," 
+				+ "PRIMARY KEY(id)"		
+				+   ")"					
+						); 
+			//add entries
+				stt.execute("INSERT INTO razinavode3 (broj) VALUES" +
+			
+					"('500')");
+				
+			
+			// Get 
+			ResultSet res = stt.executeQuery ("SELECT broj FROM razinavode3 ORDER BY id DESC LIMIT 1"
+					//+ "ORDER BY id DESC"					
+					
+					);
+			
+			while (res.next()) {
+				
+				System.out.println(res.getString("broj"));	
+				
+				Tank spremnik = new Tank();	  //tip modela 
+				int razinaTek=spremnik.getRazina();  // get za razinu
+				razinaTek = spremnik.setRazina(res.getInt("broj"));
+				System.out.println(spremnik.getRazina());				
+					 
+			}
+			
+			}	
+				
+			catch (Exception e) 
+			{
+				System.out.println("YAH" +e);
+				
+//				spremnik.setRazina(500);
+//				System.out.println(spremnik.getRazina());	
+		}
+			return;
+			
+		}
+		

@@ -1,0 +1,205 @@
+﻿<html>
+<head>
+
+<style type="text/css">
+body
+{
+margin:0;
+padding:0;
+}
+#water {  
+-webkit-appearance: none;
+appearance: none;
+border:1px solid #333;
+}
+
+#water::-webkit-progress-value
+{
+background-color:#336699;
+//background-image:url(water.png);
+//background-position:left 50px;
+transition: 1s ease;
+}
+
+
+#water::-webkit-progress-bar
+{
+    background-color:#fff;
+
+}
+
+.pumpa
+{
+width:180px;
+height:97px;
+background-image:url('pipe.png');
+background-size:100% 100%;
+float:right;
+margin-top:400px;
+margin-left:620px;
+transition:0.2s;
+}
+
+.pumpa2
+{
+width:180px;
+height:97px;
+background-image:url('pipe.png');
+background-size:100% 100%;
+float:right;
+margin-top:400px;
+margin-left:600px;
+transition:0.2s;
+}
+
+.ventil
+{
+width:200px; height:200px; margin-left:0px; background-image:url('ventil.png'); background-size:100% 100%; z-index:200; transition:0.2s; position:absolute;
+
+}
+
+.ventil2
+{
+width:200px; height:200px; margin-left:30px; background-image:url('ventil.png'); background-size:100% 100%; z-index:200; transition:0.2s; position:absolute;
+
+}
+</style>
+
+<script type="text/javascript">
+function checker(){
+var w = window,
+    d = document,
+    e = d.documentElement,
+    g = d.getElementsByTagName('body')[0],
+    x = w.innerWidth || e.clientWidth || g.clientWidth,
+    y = w.innerHeight|| e.clientHeight|| g.clientHeight;
+	
+	
+	var xx = x*0.8;
+	var yy = y*0.8;
+	//document.getElementById('water').style.width = '100%';
+	//document.getElementById('water').style.height = '100%';
+	
+	document.getElementById('water').style.webkitTransform = "rotate(270deg)";
+	
+	showUser(1);
+	}
+
+function showUser(str) {
+    if (str == "") 
+		{
+        document.getElementById("txtHint").innerHTML = "";
+        return;
+		} 
+		
+	else 
+		{ 
+			if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } 
+			else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+			xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("txtHint").innerHTML = xmlhttp.responseText;
+				
+				var razina = document.getElementById("lbl").innerHTML;
+
+				document.getElementById("water").value = razina;
+				setTimeout(function(){ provita(); }, 100);
+				
+            }
+        }
+        xmlhttp.open("GET","get.php",true);
+        xmlhttp.send();
+    }
+	
+	
+	//var razina = document.getElementById('lbl').value;
+	
+	
+	setTimeout(function(){ showUser(); }, 1000);
+	
+}
+
+function provita()
+{
+
+var razina = document.getElementById("lbl").innerHTML;
+
+document.getElementById("water").value = razina;
+var raz = document.getElementById('txtHint2').innerHTML;
+
+if(razina<raz && razina%10==0)
+{
+document.getElementById('txtHint3').innerHTML = "pumpa";
+document.getElementById('ventil').classList.remove('ventil2');
+document.getElementById('ventil').classList.add('ventil');
+document.getElementById('pumpa').classList.remove('pumpa');
+document.getElementById('pumpa').classList.add('pumpa2');
+document.getElementById('pumpa').style.backgroundImage = "url('pipe2.png')";
+document.getElementById('ventil').style.backgroundImage = "url('ventil.png')";
+}
+else if(razina>raz && razina%10==0)
+{
+document.getElementById('txtHint3').innerHTML = "ventil";
+document.getElementById('pumpa').classList.remove('pumpa2');
+document.getElementById('pumpa').classList.add('pumpa');
+document.getElementById('ventil').classList.remove('ventil');
+document.getElementById('ventil').classList.add('ventil2');
+document.getElementById('ventil').style.backgroundImage = "url('ventil2.png')";
+}
+else if(razina>raz || razina<raz && razina%10!=0)
+{
+
+document.getElementById('pumpa').classList.remove('pumpa');
+document.getElementById('pumpa').classList.add('pumpa2');
+document.getElementById('ventil').classList.remove('ventil');
+document.getElementById('ventil').classList.add('ventil2');
+document.getElementById('pumpa').style.backgroundImage = "url('pipe2.png')";
+document.getElementById('ventil').style.backgroundImage = "url('ventil2.png')";
+}
+else
+{
+document.getElementById('txtHint3').innerHTML = "equal";
+document.getElementById('pumpa').style.backgroundImage = "url('pipe.png')";
+
+}
+raz = document.getElementById("lbl").innerHTML;
+document.getElementById('txtHint2').innerHTML = raz;
+}
+</script>
+</head>
+<body onLoad="checker()">
+
+
+<h3 style="font-family:'Century Gothic', sans-serif; text-align:center; margin-top:15px;">Vodosprema - simulacija</h3>
+<div style="width:800px; height:500px; margin-left:auto; margin-right:auto; background-color:#eee; margin-top:70px;	box-shadow: 0px 5px 5px #888888;">
+<div style="float:left; background-color:white; width:130px; height:25px; TEXT-ALIGN:center; font-family:'Century Gothic', sans-serif;">
+<div style="float:left; TEXT-ALIGN:CENTER; font-size:22px;">RAZINA: </div>
+<div id="txtHint" style="float:left; TEXT-ALIGN:left;"><b></b></div>
+<div id="txtHint2" style="float:left; DISPLAY:NONE;"><b>0</b></div>
+<div id="txtHint3" style="float:left; DISPLAY:NONE;"><b>p/v</b></div>
+</div>
+
+
+
+<div id="ventil" class="ventil" style="margin-top:23px;">
+
+</div>
+
+<div style="width:145px; height:400px; background-color:transparent; margin-left:200px; margin-top:73px; float:left; clear:both; z-index:100; position:relative;">
+<progress id="water" style="height:400px; width:400px;" max="500">
+</progress>
+</div>
+
+<div id="pumpa" class="pumpa" style="position:absolute; z-index:300;">
+
+</div>
+
+</div>
+</body>
+</html>
